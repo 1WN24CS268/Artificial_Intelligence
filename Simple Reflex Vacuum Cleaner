@@ -1,0 +1,23 @@
+A = input("Enter Room A condition (CLEAN/DIRTY): ").upper()
+B = input("Enter Room B condition (CLEAN/DIRTY): ").upper()
+position = input("Enter vacuum position (A/B): ").upper()
+steps = int(input("Enter number of steps: "))
+
+rooms = {"A": A, "B": B}
+
+for i in range(steps):
+    print("\nStep", i + 1)
+    print("Position:", position)
+    print("Room A:", rooms["A"], "| Room B:", rooms["B"])
+
+    if rooms[position] == "DIRTY":
+        print("DIRTY -> SUCK")
+        rooms[position] = "CLEAN"
+    else:
+        print("CLEAN -> MOVE")
+        position = "B" if position == "A" else "A"
+
+print("\nFinal State:")
+print("Room A:", rooms["A"])
+print("Room B:", rooms["B"])
+print("Vacuum Position:", position)
