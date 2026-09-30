@@ -1,0 +1,79 @@
+class ModelBasedVacuumAgent:
+    
+    def __init__(self):
+        self.state = {
+            "A": "Unknown",
+            "B": "Unknown"
+        }
+    def update_state(self, location, percept):
+        self.state[location] = percept
+
+    def choose_action(self, location, percept):
+        self.update_state(location, percept)
+        if percept == "Dirty":
+            return "Suck"
+
+        elif location == "A":
+            return "Right"
+
+        elif location == "B":
+            return "Left"
+
+
+class VacuumEnvironment:
+
+    def __init__(self, room_a, room_b, location):
+        self.rooms = {
+            "A": room_a,
+            "B": room_b
+        }
+        self.agent_location = location
+
+    def get_percept(self):
+        return self.agent_location, self.rooms[self.agent_location]
+
+    def execute_action(self, action):
+
+        if action == "Suck":
+            self.rooms[self.agent_location] = "Clean"
+            print("Action: Suck")
+            print("Room", self.agent_location, "is now Clean")
+
+        elif action == "Right":
+            self.agent_location = "B"
+            print("Action: Move Right")
+
+        elif action == "Left":
+            self.agent_location = "A"
+            print("Action: Move Left")
+
+print("MODEL-BASED VACUUM CLEANER")
+room_a = input("Enter status of Room A (Clean/Dirty): ").capitalize()
+room_b = input("Enter status of Room B (Clean/Dirty): ").capitalize()
+
+location = input("Enter initial location (A/B): ").upper()
+
+environment = VacuumEnvironment(room_a, room_b, location)
+
+agent = ModelBasedVacuumAgent()
+
+print("\nInitial Environment:")
+print(environment.rooms)
+print("Vacuum Location:", environment.agent_location)
+
+steps = int(input("\nEnter number of steps: "))
+for step in range(steps):
+
+    print("\n--- Step", step + 1, "---")
+    location, percept = environment.get_percept()
+
+    print("Location:", location)
+    print("Percept:", percept)
+    action = agent.choose_action(location, percept)
+
+    print("Internal State:", agent.state)
+    print("Action:", action)
+    environment.execute_action(action)
+    print("Environment:", environment.rooms)
+print("\nFinal Environment:")
+print(environment.rooms)
